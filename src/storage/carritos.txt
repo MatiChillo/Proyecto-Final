@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "timestamp": 1668709116.784,
+    "productos": [
+      {
+        "name": "testing",
+        "description": "testing",
+        "code": 7919,
+        "url": "akjsdkamd.com",
+        "price": 77777,
+        "stock": 13,
+        "id": 1,
+        "timestamp": 1668708846.008
+      }
+    ]
+  }
+]
