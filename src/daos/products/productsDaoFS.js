@@ -8,20 +8,6 @@ class ProductClass extends ContainerFile {
 
     }
 
-    activateProducts() {
-
-        return [ 
-
-            {
-
-                productName: "FS Products"
-
-            }
-
-        ];
-
-    }
-
 }
 
 export default ProductClass;

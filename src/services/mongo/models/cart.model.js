@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const cartSchema = new mongoose.Schema({
+export const cartSchema = new Schema({
 
     timestamp: 
         {
@@ -16,4 +16,4 @@ const cartSchema = new mongoose.Schema({
 
 });
 
-export default mongoose.model( "cart", cartSchema );
+export const CartModel = model( "carts", cartSchema );
