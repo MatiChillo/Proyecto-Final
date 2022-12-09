@@ -1,11 +1,18 @@
-const express = require("express");
-require("dotenv").config();
+import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
 
-const router = require('./src/routes/index');
+//import ProductService from './src/daos/index.js';
 
-const errorHandler = require('./src/middleware/errorHandler');
+import router from './src/routes/index.js';
+
+import errorHandler from './src/middleware/errorHandler.js';
+
+//import mongoConnect  from './src/services/mongo/config/connect.js';
 
 const app = express();
+
+//mongoConnect();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -24,4 +31,7 @@ app.use( ( req, res, _next ) => {
 
 } );
 
-module.exports = app;
+//ProductService();
+//CartService();
+
+export default app;

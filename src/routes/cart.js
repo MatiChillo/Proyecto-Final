@@ -1,7 +1,8 @@
-const router = require('express').Router();
+import express from 'express';
+const router = express.Router();
 
-const cont = require('../storage/cart');
-const contProduct = require('../storage/products');
+//import cont from '../storage/contenedorCartArchivo.js';
+//import contProduct from '../storage/contenedorArchivo.js';
 
 router.get('/:id/productos', async (req, res, next) => {
 
@@ -160,4 +161,4 @@ router.delete('/:id/productos/:id_prod', async (req, res, next) => {
 
 });
 
-module.exports = router;
+export default router;

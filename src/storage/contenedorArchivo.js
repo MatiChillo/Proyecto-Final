@@ -1,6 +1,8 @@
-const fs = require('fs');
+import fs from 'fs';
 
-class Contenedor {
+import { ProductService } from '../daos/index.js';
+
+class ContainerFile {
 
     constructor ( archivo ) {
 
@@ -8,7 +10,7 @@ class Contenedor {
 
     }
 
-    async saveCart( object ) {
+    async save( object ) {
 
         try {
 
@@ -36,36 +38,6 @@ class Contenedor {
 
             await fs.promises.writeFile( `./${this.archivo}`, JSON.stringify( dataToJson, null, 2 ) );
 
-            return object.id;
-            
-        } catch (error) {
-
-            console.log(error);
-            
-        }
-
-    }
-
-    async saveProduct( object, id ) {
-
-        try {
-
-            const data = await fs.promises.readFile( `./${this.archivo}`, 'utf-8' );
-
-            const dataToJson = JSON.parse( data );
-
-            let cart = dataToJson.find( element => element.id == id ); 
-
-            if ( cart.productos == undefined ) {
-
-                cart.productos = [];
-
-            } 
-
-            cart.productos.push( object );
-
-            await fs.promises.writeFile( `./${this.archivo}`, JSON.stringify( dataToJson, null, 2 ) );
-
             return object;
             
         } catch (error) {
@@ -84,15 +56,15 @@ class Contenedor {
 
             const dataToJson = JSON.parse( data );
 
-            const objectToFind = dataToJson.find(element => {
+            const objectToFind = dataToJson.find(element => 
     
-                return element.id == id;
+                element.id == id
               
-            });
+            );
 
             if ( objectToFind != undefined ) {
 
-                return objectToFind.productos;
+                return objectToFind;
 
             } else {
 
@@ -142,26 +114,28 @@ class Contenedor {
 
             data = JSON.parse( data );
 
-            let product = await cont.getById( id );
+            const productService = await ProductService();
 
-            if ( product ) {
+            let get = await productService.getById( id );
 
-                product = {
+            if ( get ) {
 
-                    ...product,
+                get = {
+
+                    ...get,
                     ...change
 
                 };
 
-                data = data.map( prod => {
+                data = data.map( element => {
 
-                    if ( prod.id == product.id ) {
+                    if ( element.id == get.id ) {
 
-                        prod = product;
+                        element = get;
 
                     }
 
-                    return prod;
+                    return element;
 
                 });
 
@@ -169,33 +143,35 @@ class Contenedor {
 
                 await fs.promises.writeFile( `./${this.archivo}`, data );
 
-                return product;
+                return get;
 
             } else {
 
                 return null;
             
             }
-        
+
         } catch ( error ) {
 
-            console.log(error);
+            console.error( error );
 
         }
+
+
 
     }
 
     async deleteById( id ) {
-        
+
         try {
 
             const data = await fs.promises.readFile( `./${this.archivo}`, 'utf-8' );
 
             const dataToJson = JSON.parse( data );
 
-            let product = dataToJson.find( prod => prod.id == id );
+            let get = dataToJson.find( element => element.id == id );
 
-            if ( product ) {
+            if ( get ) {
 
                 const objectToFind = dataToJson.filter(element => 
             
@@ -211,69 +187,11 @@ class Contenedor {
 
                 return null;
 
-            }
+            }     
         
-        } catch (error) {
-            
-            console.log(error);
-
-        }
-
-    }
-
-    async deleteByTwoIds( id, prod_id ) {
-
-        try {
-
-            const data = await fs.promises.readFile( `./${this.archivo}`, 'utf-8' );
-
-            const dataToJson = JSON.parse( data );
-
-            let cart = dataToJson.find( element => element.id == id );
-
-            let otherCarts = dataToJson.find( element => element.id != id );
-
-            if ( cart ) {
-
-                const objectToFind = cart.productos.filter(element => 
-            
-                    element.id != prod_id
-                    
-                );
-
-                const productToFind = cart.productos.filter(element => 
-            
-                    element.id == prod_id
-                    
-                );
-
-                if ( objectToFind && productToFind.length > 0 ) {
-
-                    let array = [];
-
-                    cart.productos = objectToFind;
-
-                    array.push( cart, otherCarts );
-
-                    await fs.promises.writeFile( `./${this.archivo}`, JSON.stringify( array, null, 2 ) );
-
-                    return cart;
-            
-                } else {
-
-                    return null;
-
-                }
-
-            } else {
-
-                return null;
-
-            } 
-
         } catch ( error ) {
 
-            console.log(error);
+            console.error( error );
 
         }
 
@@ -287,6 +205,4 @@ class Contenedor {
 
 }
 
-const cont = new Contenedor( './src/storage/carritos.txt' );
-
-module.exports = cont;
+export default ContainerFile;
