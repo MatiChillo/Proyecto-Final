@@ -1,14 +1,28 @@
-import admin from "firebase-admin";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from 'firebase/firestore';
 
-import serviceAccount from "./config.json";
+const FIREBASE_APIKEY = process.env.FIREBASE_APIKEY;
+const FIREBASE_AUTH_DOMAIN = process.env.FIREBASE_AUTH_DOMAIN;
+const FIREBASE_PROYECT_ID = process.env.FIREBASE_PROYECT_ID;
+const FIREBASE_BUCKET = process.env.FIREBASE_BUCKET;
+const FIREBASE_APP_ID = process.env.FIREBASE_APP_ID;
+const FIREBASE_SENDER_ID = process.env.FIREBASE_SENDER_ID;
 
-admin.initializeApp({
+const firebaseConfig = {
 
-    credential: admin.credential.cert(serviceAccount)
+    apiKey: FIREBASE_APIKEY,
+    authDomain: FIREBASE_AUTH_DOMAIN,
+    proyectId: FIREBASE_PROYECT_ID,
+    storageBucket: FIREBASE_BUCKET,
+    appId: FIREBASE_APP_ID,
+    messagingSenderId: FIREBASE_SENDER_ID
 
-});
+};
 
-const db = admin.firebase();
-const query = db.collection('')
+const firebaseApp = initializeApp(firebaseConfig );
+
+const firebaseDB = getFirestore( firebaseApp );
 
 console.log("FIREBASE CONNECTED");
+
+export default firebaseDB;
