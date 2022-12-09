@@ -1,6 +1,5 @@
 import ContainerMongo from '../../storage/contenedorMongoDB.js';
 import { cartSchema, CartModel } from '../../services/mongo/models/cart.model.js';
-//import { ProductClass } from '../products/productsDaoMongoDB.js';
 
 class CartClass extends ContainerMongo {
 
@@ -12,59 +11,75 @@ class CartClass extends ContainerMongo {
 
     async saveProduct ( object, id ) {
 
-        const product = await this.model.updateOne(
+        const cart = await super.getById( id );
 
-            { _id: id },
-            { $set: { productos: object } }
+        let product;
 
-        );
+        if ( cart ) {
 
-        if ( product.matchedCount == 1 || dataUpdated.modifiedCount == 1 ) {
+            cart.productos.push( object );
 
-            return {
+            product = await this.model.updateOne(
 
-                success: true,
-                message: `The product was inserted in cart seccessfully`
+                { _id: id },
+                { $set: { productos: cart.productos } }
 
-            };
+            );
 
-        } else {
+            if ( product.matchedCount == 1 || dataUpdated.modifiedCount == 1 ) {
 
-            return {
+                return {
+    
+                    success: true,
+                    message: `The product was inserted in cart seccessfully`
+    
+                };
+    
+            } else {
+    
+                return {
+    
+                    success: false,
+                    message: "Error inserting product"
+    
+                };
+            
+            }
 
-                success: false,
-                message: "Error inserting product"
-
-            };
-        
         }
 
     }
 
     async deleteByTwoIds ( id, prod_id ) {
 
-        const cart = await super.getById( { _id: id } );
+        const cart = await super.getById( id );
 
-        const products = cart.productos;
+        if ( cart ) {
 
-        console.log(products)
+            const products = cart.productos;
 
-        products.filter( element =>
+            const filter = products.filter( element =>
             
-            element._id != prod_id
-            
-        );
+                element._id != prod_id
+                
+            );
 
-        console.log(products)
+            if ( products.length == filter.length ) {
 
-        await this.model.updateOne(
+                return null;
 
-            { _id: id },
-            { $set: { productos: products } }
+            }
 
-        );
+            await this.model.updateOne(
 
-        return cart;
+                { _id: id },
+                { $set: { productos: filter } }
+    
+            );
+    
+            return filter;
+
+        }        
 
     }
 
