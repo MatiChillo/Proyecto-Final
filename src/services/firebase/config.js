@@ -12,14 +12,14 @@ const firebaseConfig = {
 
     apiKey: FIREBASE_APIKEY,
     authDomain: FIREBASE_AUTH_DOMAIN,
-    proyectId: FIREBASE_PROYECT_ID,
+    projectId: FIREBASE_PROYECT_ID,
     storageBucket: FIREBASE_BUCKET,
     appId: FIREBASE_APP_ID,
     messagingSenderId: FIREBASE_SENDER_ID
 
 };
 
-const firebaseApp = initializeApp(firebaseConfig );
+const firebaseApp = initializeApp( firebaseConfig );
 
 const firebaseDB = getFirestore( firebaseApp );
 

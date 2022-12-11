@@ -1,17 +1,10 @@
-class ProductClass {
+import ContainerFirebase from "../../storage/contenedorFirebase.js";
 
-    constructor(){}
+class ProductClass extends ContainerFirebase {
 
-    activateProducts() {
+    constructor() {
 
-        return [ 
-
-            {
-
-                productName: "Firebase Products"
-
-            }
-        ];
+        super( 'products' );
 
     }
 
